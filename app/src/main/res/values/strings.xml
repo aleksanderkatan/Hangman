@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Projekt</string>
+    <string name="enter_your_name">Enter your name!</string>
+    <string name="save">Save</string>
+    <string name="hangman">HANGMAN</string>
+    <string name="singleplayer">Singleplayer</string>
+    <string name="multiplayer">MULTIPLAYER</string>
+    <string name="games_log">GAMES LOG</string>
+    <string name="textview">TextView</string>
+</resources>
