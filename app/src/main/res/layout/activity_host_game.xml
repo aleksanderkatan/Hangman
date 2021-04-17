@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/cbSafetyWords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Safety words"
+        tools:layout_editor_absoluteX="95dp"
+        tools:layout_editor_absoluteY="99dp" />
+
+    <TextView
+        android:id="@+id/txtOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GAME OPTIONS"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="43dp" />
+
+    <SeekBar
+        android:id="@+id/sbSafetyWords"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="197dp"
+        android:layout_height="24dp"
+        android:max="5"
+        android:min="1"
+        android:progress="1"
+        tools:layout_editor_absoluteX="95dp"
+        tools:layout_editor_absoluteY="176dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
