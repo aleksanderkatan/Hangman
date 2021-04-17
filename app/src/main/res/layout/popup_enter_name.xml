@@ -15,7 +15,10 @@
         android:layout_marginTop="100dp"
         android:text="@string/enter_your_name"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp" />
+        tools:layout_editor_absoluteX="16dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        />
 
     <EditText
         android:id="@+id/enterNamePopup_name"

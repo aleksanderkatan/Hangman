@@ -11,6 +11,7 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".GameActivity" />
         <activity android:name=".HostGameActivity" />
+        <activity android:name=".HostWaitingActivity" />
         <activity android:name=".JoinGameActivity" />
         <activity android:name=".GamesLogActivity" />
         <activity android:name=".MainActivity">

@@ -5,17 +5,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/numPointsToWin"
+        android:layout_width="64dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="3"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/txtPointsToWin"
+        app:layout_constraintTop_toBottomOf="@+id/txtOptions"
+        app:layout_constraintVertical_bias="0.072" />
+
+    <EditText
+        android:id="@+id/numSafetyWords"
+        android:layout_width="63dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="3"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintStart_toEndOf="@+id/cbSafetyWords"
+        app:layout_constraintTop_toBottomOf="@+id/numPointsToWin"
+        app:layout_constraintVertical_bias="0.057" />
+
+    <TextView
+        android:id="@+id/txtPointsToWin"
+        android:layout_width="131dp"
+        android:layout_height="38dp"
+        android:gravity="center"
+        android:text="Points to win"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOptions"
+        app:layout_constraintVertical_bias="0.072" />
+
     <CheckBox
         android:id="@+id/cbSafetyWords"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
         android:text="Safety words"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.353"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sbPointsToWin"
+        app:layout_constraintTop_toBottomOf="@+id/txtPointsToWin"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -29,57 +75,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.095" />
 
-    <SeekBar
-        android:id="@+id/sbSafetyWords"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="197dp"
-        android:layout_height="24dp"
-        android:max="4"
-        android:progress="3"
-        android:tag="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cbSafetyWords"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <SeekBar
-        android:id="@+id/sbPointsToWin"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="197dp"
-        android:layout_height="24dp"
-        android:labelFor="@id/txtPointsToWin"
-        android:max="4"
-        android:progress="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPointsToWin"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/txtPointsToWin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Points to win"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOptions"
-        app:layout_constraintVertical_bias="0.0" />
-
     <Button
         android:id="@+id/btPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginBottom="184dp"
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sbSafetyWords"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/cbSafetyWords"
+        app:layout_constraintVertical_bias="0.755" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
