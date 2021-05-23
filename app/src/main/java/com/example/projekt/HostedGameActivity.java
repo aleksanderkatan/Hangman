@@ -1,10 +1,14 @@
 package com.example.projekt;
 
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import com.example.projekt.bluetooth.BluetoothConnectionService;
 
-public class GameActivity extends AppCompatActivity {
+public class HostedGameActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

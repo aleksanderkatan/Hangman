@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("elo");
+
         btSingleplayer = findViewById(R.id.btSingleplayer);
         btMultiplayer = findViewById(R.id.btMultiplayer);
         btLog = findViewById(R.id.btLog);
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
         sharedPrefEditor = sharedPref.edit();
 
-        btSingleplayer.setOnClickListener(v -> changeActivity(GameActivity.class));
+        btSingleplayer.setOnClickListener(v -> changeActivity(JoinedGameActivity.class));
         btMultiplayer.setOnClickListener(v -> multiplayer());
         btLog.setOnClickListener(v -> changeActivity(GamesLogActivity.class));
         txtGreet.setOnClickListener(v -> enterName(true));

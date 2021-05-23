@@ -30,7 +30,7 @@ public class GameEntryListAdapter extends RecyclerView.Adapter<GameEntryListAdap
     @NonNull
     @Override
     public GameEntryListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.recycler_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.recycler_row_game_entry, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -50,7 +50,7 @@ public class GameEntryListAdapter extends RecyclerView.Adapter<GameEntryListAdap
         TextView txtGameEntry;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtGameEntry = itemView.findViewById(R.id.txtGameEntry);
+            txtGameEntry = itemView.findViewById(R.id.txtBluetoothDevice);
         }
     }
 }

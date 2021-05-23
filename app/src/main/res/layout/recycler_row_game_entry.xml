@@ -7,10 +7,10 @@
 
 
     <TextView
-        android:id="@+id/txtGameEntry"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtBluetoothDevice"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        />
+        android:textSize="14sp" />
+
 
 </LinearLayout>
