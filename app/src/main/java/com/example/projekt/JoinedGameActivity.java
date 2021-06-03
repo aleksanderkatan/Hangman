@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.projekt.bluetooth.BluetoothConnectionService;
@@ -23,6 +24,8 @@ import com.example.projekt.game_logic.GameManager;
 import com.example.projekt.game_logic.GameMessage;
 import com.example.projekt.game_logic.GameMessageFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class JoinedGameActivity extends AppCompatActivity {
@@ -30,9 +33,10 @@ public class JoinedGameActivity extends AppCompatActivity {
     BluetoothConnectionService bcs;
     boolean host;
 
-    Button btReady, btSendMessage;
+    Button btSendMessage;
     TextView txtPlayers, txtGuessing, txtPassword, txtData;
     EditText etData;
+    GameKeyboard keyboard;
 
     GameManager gameManager;
 
@@ -88,6 +92,8 @@ public class JoinedGameActivity extends AppCompatActivity {
             txtGuessing.setText("You're spectating!");
         }
         txtPassword.setText(currentGame.getGuessedPassword());
+
+        keyboard.updateButtons(gameManager.getCurrentGame().getGuessedCharacters());
     }
 
     @Override
@@ -95,7 +101,6 @@ public class JoinedGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        btReady = findViewById(R.id.btReady);
         btSendMessage = findViewById(R.id.btSendMessage);
         txtPlayers = findViewById(R.id.txtPlayers);
         txtGuessing = findViewById(R.id.txtGuessing);
@@ -103,23 +108,16 @@ public class JoinedGameActivity extends AppCompatActivity {
         txtData = findViewById(R.id.txtData);
         etData = findViewById(R.id.etData);
 
+        LinearLayout[] keyButtonsLayouts = new LinearLayout[]{findViewById(R.id.loButtons1), findViewById(R.id.loButtons2), findViewById(R.id.loButtons3)};
+        keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
+        keyboard.prepareKeyButtons();
+
         btSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btSendMessageAction();
             }
         });
-
-        btReady.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-//        SharedPreferences sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
-//        String startedFrom = sharedPref.getString("StartedGameFrom", null);
-//        Log.d(TAG, startedFrom);
 
         host = "Host".equals(getFromSharedPref("StartedGameFrom"));
 
@@ -149,6 +147,18 @@ public class JoinedGameActivity extends AppCompatActivity {
             GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, getFromSharedPref("playerName"));
             bcs.write(GameMessage.toBytes(m));
         }
+    }
+
+    void btKeyPressedAction(Character c) {
+        Log.d(TAG, "Key pressed: " + c);
+        c = Character.toLowerCase(c);
+
+        if (! gameManager.getCurrentGame().isGuessing()) return;
+
+        GameMessage message = GameMessageFactory.produceNormalMessage(c);
+        gameManager.message(message);
+        updateView();
+        bcs.write(GameMessage.toBytes(message));
     }
 
     void btSendMessageAction() {
@@ -190,6 +200,7 @@ public class JoinedGameActivity extends AppCompatActivity {
                 bcs.write(GameMessage.toBytes(yourMessage));
 
                 dialog.hide();
+                updateView();
             }
         });
 

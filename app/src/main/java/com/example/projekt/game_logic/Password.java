@@ -1,16 +1,20 @@
 package com.example.projekt.game_logic;
 
+import android.util.Pair;
+
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Password {
     private final String word;
-    private final Set<Character> chars;
+    private final Map<Character, Boolean> chars;
 
     public Password(String word) {
-        this.word = word;
-        this.chars = new HashSet<>();
+        this.word = word.toLowerCase();
+        this.chars = new HashMap<>();
     }
 
     public boolean isInPassword(Character c) {
@@ -21,15 +25,15 @@ public class Password {
     }
 
     public void guess(Character c) {
-        chars.add(c);
+        chars.put(c, isInPassword(c));
     }
 
     public String getGuessedPassword() {
         StringBuilder answer = new StringBuilder();
 
         for (int i = 0; i< word.length(); i++) {
-            Character c = word.charAt(i);
-            if (c == ' ' || chars.contains(c)) {
+            char c = word.charAt(i);
+            if (c == ' ' || c == '-' || chars.get(c) != null) {
                 answer.append(c);
             } else {
                 answer.append('_');
@@ -42,4 +46,6 @@ public class Password {
     public String getPassword() {
         return word;
     }
+
+    public Map<Character, Boolean> getGuessedCharacters() { return chars; }
 }

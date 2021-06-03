@@ -1,5 +1,10 @@
 package com.example.projekt.game_logic;
 
+import android.util.Pair;
+
+import java.util.Map;
+import java.util.Set;
+
 public class GameInstance {
     private Boolean guessing; // ! napraw to
     private Password password;
@@ -29,4 +34,6 @@ public class GameInstance {
     }
 
     public String getGuessedPassword() { return password.getGuessedPassword(); }
+
+    public Map<Character, Boolean> getGuessedCharacters() { return password.getGuessedCharacters(); }
 }

@@ -100,16 +100,39 @@
         app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/btReady"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ready"
-        app:layout_constraintBottom_toTopOf="@+id/btSendMessage"
+    <LinearLayout
+        android:id="@+id/loButtons"
+        android:layout_width="376dp"
+        android:layout_height="198dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.832"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtHangman"
-        app:layout_constraintVertical_bias="0.726" />
+        app:layout_constraintVertical_bias="0.087">
+
+        <LinearLayout
+            android:id="@+id/loButtons1"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loButtons2"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loButtons3"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:orientation="horizontal"></LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
