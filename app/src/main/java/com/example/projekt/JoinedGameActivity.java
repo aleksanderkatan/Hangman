@@ -33,9 +33,7 @@ public class JoinedGameActivity extends AppCompatActivity {
     BluetoothConnectionService bcs;
     boolean host;
 
-    Button btSendMessage;
-    TextView txtPlayers, txtGuessing, txtPassword, txtData;
-    EditText etData;
+    TextView txtPlayers, txtGuessing, txtPassword, txtFails;
     GameKeyboard keyboard;
 
     GameManager gameManager;
@@ -46,7 +44,6 @@ public class JoinedGameActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "received message");
             byte[] mess = intent.getByteArrayExtra("TheMessage");
-            txtData.setText(new String(mess));
 
             GameMessage message = GameMessage.fromBytes(mess);
             if (message == null) {
@@ -59,7 +56,7 @@ public class JoinedGameActivity extends AppCompatActivity {
                 if (host) {
                     enterPassword();
                 } else {
-                    GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, getFromSharedPref("playerName"));
+                    GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, 6, getFromSharedPref("playerName"));
                     bcs.write(GameMessage.toBytes(m));
                 }
                 updateView();
@@ -72,6 +69,10 @@ public class JoinedGameActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void updateView() {
+        GameInstance currentGame = gameManager.getCurrentGame();
+        if (currentGame == null)
+            return;
+
         StringBuilder s = new StringBuilder();
         s.append(gameManager.getMe().name);
         s.append(" ");
@@ -82,9 +83,6 @@ public class JoinedGameActivity extends AppCompatActivity {
         s.append(gameManager.getYou().name);
         txtPlayers.setText(new String(s));
 
-        GameInstance currentGame = gameManager.getCurrentGame();
-        if (currentGame == null)
-            return;
 
         if (currentGame.isGuessing()) {
             txtGuessing.setText("You're guessing!");
@@ -92,6 +90,13 @@ public class JoinedGameActivity extends AppCompatActivity {
             txtGuessing.setText("You're spectating!");
         }
         txtPassword.setText(currentGame.getGuessedPassword());
+
+        s = new StringBuilder();
+        s.append("Fails: ");
+        s.append(gameManager.getFails());
+        s.append("/");
+        s.append(gameManager.getMaxFails());
+        txtFails.setText(new String(s));
 
         keyboard.updateButtons(gameManager.getCurrentGame().getGuessedCharacters());
     }
@@ -101,23 +106,14 @@ public class JoinedGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        btSendMessage = findViewById(R.id.btSendMessage);
         txtPlayers = findViewById(R.id.txtPlayers);
         txtGuessing = findViewById(R.id.txtGuessing);
         txtPassword = findViewById(R.id.txtPassword);
-        txtData = findViewById(R.id.txtData);
-        etData = findViewById(R.id.etData);
+        txtFails = findViewById(R.id.txtFails);
 
         LinearLayout[] keyButtonsLayouts = new LinearLayout[]{findViewById(R.id.loButtons1), findViewById(R.id.loButtons2), findViewById(R.id.loButtons3)};
         keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
         keyboard.prepareKeyButtons();
-
-        btSendMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btSendMessageAction();
-            }
-        });
 
         host = "Host".equals(getFromSharedPref("StartedGameFrom"));
 
@@ -144,7 +140,7 @@ public class JoinedGameActivity extends AppCompatActivity {
             Thread thread = new Thread(task);
             thread.start();
         } else {
-            GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, getFromSharedPref("playerName"));
+            GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, 6, getFromSharedPref("playerName"));
             bcs.write(GameMessage.toBytes(m));
         }
     }
@@ -159,14 +155,6 @@ public class JoinedGameActivity extends AppCompatActivity {
         gameManager.message(message);
         updateView();
         bcs.write(GameMessage.toBytes(message));
-    }
-
-    void btSendMessageAction() {
-        char a = etData.getText().toString().charAt(0);
-        GameMessage m = GameMessageFactory.produceNormalMessage(a);
-        bcs.write(GameMessage.toBytes(m));
-        gameManager.message(m);
-        updateView();
     }
 
     public String getFromSharedPref(String key) {

@@ -18,16 +18,20 @@ public class GameMessage implements Serializable {
     public final Character character;
     public final int safetyWords;
     public final int pointsToWin;
+    public final int maxFails;
     public final boolean guessing;
     public final String word;
 
+
     public GameMessage(MessageType type, String playerName, Character character,
-                        int safetyWords, int pointsToWin, boolean guessing, String word) {
+                       int safetyWords, int pointsToWin, int maxFails,
+                       boolean guessing, String word) {
         this.type = type;
         this.playerName = playerName;
         this.character = character;
         this.safetyWords = safetyWords;
         this.pointsToWin = pointsToWin;
+        this.maxFails = maxFails;
         this.guessing = guessing;
         this.word = word;
     }

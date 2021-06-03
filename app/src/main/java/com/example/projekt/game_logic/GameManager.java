@@ -10,6 +10,7 @@ public class GameManager {
 
     int safetyWords;
     int pointsToWin;
+    int maxFails;
 
     private Player me;
     private Player you;
@@ -19,6 +20,7 @@ public class GameManager {
         this.you = new Player(initMessage.playerName);
         safetyWords = initMessage.safetyWords;
         pointsToWin = initMessage.pointsToWin;
+        maxFails = initMessage.maxFails;
     }
 
     public GameManager() {
@@ -26,6 +28,7 @@ public class GameManager {
         you = new Player("You");
         safetyWords = 0;
         pointsToWin = 10000;
+        maxFails = 10000;
     }
 
     public void message(GameMessage message) {
@@ -52,4 +55,9 @@ public class GameManager {
     public GameInstance getCurrentGame() {
         return currentGame;
     }
+
+    public int getSafetyWords() { return safetyWords; }
+    public int getPointsToWin() { return pointsToWin; }
+    public int getFails() { return currentGame.getFails(); }
+    public int getMaxFails() { return maxFails; }
 }

@@ -7,44 +7,6 @@
     tools:context=".JoinedGameActivity">
 
     <TextView
-        android:id="@+id/txtData"
-        android:layout_width="106dp"
-        android:layout_height="57dp"
-        android:text="Data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.363"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
-        app:layout_constraintVertical_bias="0.655" />
-
-    <Button
-        android:id="@+id/btSendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="send"
-        app:layout_constraintBottom_toTopOf="@+id/etData"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.832"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
-        app:layout_constraintVertical_bias="0.827" />
-
-    <EditText
-        android:id="@+id/etData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.293"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtData"
-        app:layout_constraintVertical_bias="0.24" />
-
-    <TextView
         android:id="@+id/txtPlayers"
         android:layout_width="318dp"
         android:layout_height="21dp"
@@ -109,10 +71,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
-        app:layout_constraintVertical_bias="0.087">
+        app:layout_constraintTop_toBottomOf="@+id/txtFails"
+        app:layout_constraintVertical_bias="0.442">
 
         <LinearLayout
             android:id="@+id/loButtons1"
@@ -134,5 +96,18 @@
             android:gravity="center"
             android:orientation="horizontal"></LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtFails"
+        android:layout_width="188dp"
+        android:layout_height="22dp"
+        android:gravity="center"
+        android:text="Fails: 0/0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
