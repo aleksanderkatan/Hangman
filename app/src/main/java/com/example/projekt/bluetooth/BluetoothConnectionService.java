@@ -238,7 +238,7 @@ public class BluetoothConnectionService implements Serializable {
                     Log.d(TAG, "InputStream: " + incomingMessage);
 
                     Intent incomingMessageIntent = new Intent("IncomingMessage");
-                    incomingMessageIntent.putExtra("TheMessage", incomingMessage);
+                    incomingMessageIntent.putExtra("TheMessage", buffer);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(incomingMessageIntent);
                 } catch (IOException e) {
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage() );

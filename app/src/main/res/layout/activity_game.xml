@@ -13,10 +13,10 @@
         android:text="Data"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.318"
+        app:layout_constraintHorizontal_bias="0.363"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.172" />
+        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
+        app:layout_constraintVertical_bias="0.655" />
 
     <Button
         android:id="@+id/btSendMessage"
@@ -27,8 +27,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.832"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.549" />
+        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
+        app:layout_constraintVertical_bias="0.827" />
 
     <EditText
         android:id="@+id/etData"
@@ -39,7 +39,77 @@
         android:text="data"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.293"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtData" />
+        app:layout_constraintTop_toBottomOf="@+id/txtData"
+        app:layout_constraintVertical_bias="0.24" />
+
+    <TextView
+        android:id="@+id/txtPlayers"
+        android:layout_width="318dp"
+        android:layout_height="21dp"
+        android:gravity="center"
+        android:text="Player1 vs Player2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
+        android:id="@+id/txtPassword"
+        android:layout_width="172dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/txtHangman"
+        app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
+        app:layout_constraintVertical_bias="0.174" />
+
+    <TextView
+        android:id="@+id/txtGuessing"
+        android:layout_width="186dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="You're spectating"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.368"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPlayers"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txtHangman"
+        android:layout_width="187dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="hangman placegolder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.071"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btReady"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ready"
+        app:layout_constraintBottom_toTopOf="@+id/btSendMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.832"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
+        app:layout_constraintVertical_bias="0.726" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
