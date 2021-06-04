@@ -84,8 +84,10 @@ public class GameKeyboard {
     }
 
     public void resetButtons() {
-        for (Character c : keyButtons.keySet()) {
-            keyButtons.get(c).setClickable(true);
+        for (Map.Entry<Character, Button> p : keyButtons.entrySet()) {
+            Button button = p.getValue();
+            button.setClickable(true);
+            button.setTextColor(Color.rgb(255, 255, 255));
         }
     }
 

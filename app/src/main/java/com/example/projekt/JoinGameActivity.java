@@ -159,6 +159,12 @@ public class JoinGameActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        finish();
+//    }
+
     void btConnectAction() {
         if (connectionDevice == null || connectionDevice.size() == 0) {
             Log.d(TAG, "no paired device selected");

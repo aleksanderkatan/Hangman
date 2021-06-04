@@ -50,24 +50,35 @@ public class JoinedGameActivity extends AppCompatActivity {
                 Log.d(TAG, "Got non-game message bytes: " + new String(mess));
                 return;
             }
-            switch (message.type) {
-                case INIT_MANAGER:
-                    Log.d(TAG, "received init manager message");
-                    gameManager.initialize(message, getFromSharedPref("playerName"));
-                    GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getFromSharedPref("playerName"));
-                    bcs.write(GameMessage.toBytes(m));
-                    break;
-                case INIT_MANAGER_ANSWER:
-                    enterPassword();        // host is always second to guess
-                    break;
-                case INIT_GAME:
-                case NORMAL:
-                    gameManager.message(message);
-                    break;
-            }
-            updateView();
+            manageMessage(message);
         }
     };
+
+    private void manageMessage(GameMessage message) {
+        switch (message.type) {
+            case INIT_MANAGER:
+                Log.d(TAG, "received init manager message");
+                gameManager.initializeOptions(message);
+                gameManager.initializeMe(getFromSharedPref("playerName"));
+                gameManager.initializeYou(message.playerName);
+                gameManager.isGuessing = true;
+                GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getFromSharedPref("playerName"));
+                bcs.write(GameMessage.toBytes(m));
+                break;
+            case INIT_MANAGER_ANSWER:
+                gameManager.initializeYou(message.playerName);
+                gameManager.isGuessing = false;
+                enterPassword();        // host is always second to guess
+                break;
+            case INIT_GAME:
+            case NORMAL:
+                gameManager.message(message);
+                break;
+        }
+        if (gameManager.isGameFinished())
+            gameEnded();
+        updateView();
+    }
 
     @SuppressLint("SetTextI18n")
     private void updateView() {
@@ -78,15 +89,15 @@ public class JoinedGameActivity extends AppCompatActivity {
         StringBuilder s = new StringBuilder();
         s.append(gameManager.getMe().name);
         s.append(" ");
-        s.append(gameManager.getMe().score);
+        s.append(gameManager.getMe().getScore());
         s.append(" : ");
-        s.append(gameManager.getYou().score);
+        s.append(gameManager.getYou().getScore());
         s.append(" ");
         s.append(gameManager.getYou().name);
         txtPlayers.setText(new String(s));
 
 
-        if (currentGame.isGuessing()) {
+        if (gameManager.isGuessing) {
             txtGuessing.setText("You're guessing!");
         } else {
             txtGuessing.setText("You're spectating!");
@@ -143,6 +154,8 @@ public class JoinedGameActivity extends AppCompatActivity {
             thread.start();
         } else {
             GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, 6, getFromSharedPref("playerName"));
+            gameManager.initializeOptions(m);
+            gameManager.initializeMe(m.playerName);
             bcs.write(GameMessage.toBytes(m));
         }
     }
@@ -151,10 +164,10 @@ public class JoinedGameActivity extends AppCompatActivity {
         Log.d(TAG, "Key pressed: " + c);
         c = Character.toLowerCase(c);
 
-        if (! gameManager.getCurrentGame().isGuessing()) return;
+        if (! gameManager.isGuessing) return;
 
         GameMessage message = GameMessageFactory.produceNormalMessage(c);
-        gameManager.message(message);
+        manageMessage(message);
         updateView();
         bcs.write(GameMessage.toBytes(message));
     }
@@ -167,15 +180,73 @@ public class JoinedGameActivity extends AppCompatActivity {
         return ans;
     }
 
+    @SuppressLint("SetTextI18n")
+    private void gameEnded() {
+        updateView();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(bcs.context);
+        final View gameEndedPopup = getLayoutInflater().inflate(R.layout.popup_game_ended, null);
+
+        dialogBuilder.setView(gameEndedPopup);
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+
+        TextView txtResult = gameEndedPopup.findViewById(R.id.txtResult);
+        TextView txtComment = gameEndedPopup.findViewById(R.id.txtComment);
+        TextView txtThePassword = gameEndedPopup.findViewById(R.id.txtThePassword);
+        Button btProceed = gameEndedPopup.findViewById(R.id.btProceed);
+
+        if (gameManager.isGuessing) {
+            if (gameManager.guesserWon()) {
+                txtResult.setText("You won this round!");
+                txtComment.setText("You guessed correctly!");
+                gameManager.getMe().increaseScore();
+            } else {
+                txtResult.setText("You lost this round");
+                txtComment.setText("You didn't guess in time");
+                gameManager.getYou().increaseScore();
+            }
+        } else {
+            if (gameManager.guesserWon()) {
+                txtResult.setText("You lost this round");
+                txtComment.setText("Your opponent guessed correctly");
+                gameManager.getYou().increaseScore();
+            } else {
+                txtResult.setText("You won this round!");
+                txtComment.setText("Your opponent didn't guess in time!");
+                gameManager.getMe().increaseScore();
+            }
+        }
+
+
+        txtThePassword.setText("The password was: " + gameManager.getCurrentGame().getPassword());
+
+
+        btProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                keyboard.resetButtons();
+                gameManager.isGuessing = ! gameManager.isGuessing;
+                if (! gameManager.isGuessing) {
+                    enterPassword();
+                }
+                updateView();
+            }
+        });
+        dialog.show();
+    }
+
     private void enterPassword() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View enterPasswordPopup = getLayoutInflater().inflate(R.layout.popup_enter_password, null);
-        EditText password = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_password);
-        Button confirm = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_confirm);
 
         dialogBuilder.setView(enterPasswordPopup);
         AlertDialog dialog = dialogBuilder.create();
         dialog.setCancelable(false);
+
+        EditText password = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_password);
+        Button confirm = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_confirm);
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,10 +257,10 @@ public class JoinedGameActivity extends AppCompatActivity {
                 GameMessage myMessage = GameMessageFactory.produceInitGameMessage(false, word);
                 GameMessage yourMessage = GameMessageFactory.produceInitGameMessage(true, word);
 
-                gameManager.message(myMessage);
+                manageMessage(myMessage);
                 bcs.write(GameMessage.toBytes(yourMessage));
 
-                dialog.hide();
+                dialog.dismiss();
                 updateView();
             }
         });

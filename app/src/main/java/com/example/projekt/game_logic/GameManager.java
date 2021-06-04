@@ -8,16 +8,15 @@ public class GameManager {
     public final static String TAG = "GameManager";
     GameInstance currentGame;
 
-    int safetyWords;
-    int pointsToWin;
-    int maxFails;
+    private int safetyWords;
+    private int pointsToWin;
+    private int maxFails;
+    public boolean isGuessing;
 
     private Player me;
     private Player you;
 
-    public void initialize(GameMessage initMessage, String me) {
-        this.me = new Player(me);
-        this.you = new Player(initMessage.playerName);
+    public void initializeOptions(GameMessage initMessage) {
         safetyWords = initMessage.safetyWords;
         pointsToWin = initMessage.pointsToWin;
         maxFails = initMessage.maxFails;
@@ -37,15 +36,37 @@ public class GameManager {
                 break;
             case INIT_GAME:
                 currentGame = new GameInstance();
-                currentGame.initialize(message.guessing, message.word);
+                currentGame.initialize(message.word);
                 break;
             case NORMAL:
                 currentGame.move(message.character);
         }
     }
 
+    public boolean isGameFinished() {
+        if (currentGame == null) return false;
+        if (currentGame.getFails() >= maxFails) return true;
+        if (currentGame.isEntirelyGuessed()) return true;
+        return false;
+    }
+
+    public boolean guesserWon() {
+        if (! isGameFinished()) {
+            Log.d(TAG, "invalid call");
+        }
+        return currentGame.isEntirelyGuessed();
+    }
+
+    public void initializeMe(String name) {
+        me = new Player(name);
+    }
+
     public Player getMe() {
         return me;
+    }
+
+    public void initializeYou(String name) {
+        you = new Player(name);
     }
 
     public Player getYou() {
@@ -58,6 +79,6 @@ public class GameManager {
 
     public int getSafetyWords() { return safetyWords; }
     public int getPointsToWin() { return pointsToWin; }
-    public int getFails() { return currentGame.getFails(); }
     public int getMaxFails() { return maxFails; }
+    public int getFails() { return currentGame.getFails(); }
 }
