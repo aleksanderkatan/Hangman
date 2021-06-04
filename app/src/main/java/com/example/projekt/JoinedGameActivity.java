@@ -50,19 +50,21 @@ public class JoinedGameActivity extends AppCompatActivity {
                 Log.d(TAG, "Got non-game message bytes: " + new String(mess));
                 return;
             }
-            if (message.type == GameMessage.MessageType.INIT_MANAGER) {
-                Log.d(TAG, "received init manager message");
-                gameManager.initialize(message, getFromSharedPref("playerName"));
-                if (host) {
-                    enterPassword();
-                } else {
-                    GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, 6, getFromSharedPref("playerName"));
+            switch (message.type) {
+                case INIT_MANAGER:
+                    Log.d(TAG, "received init manager message");
+                    gameManager.initialize(message, getFromSharedPref("playerName"));
+                    GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getFromSharedPref("playerName"));
                     bcs.write(GameMessage.toBytes(m));
-                }
-                updateView();
-                return;
+                    break;
+                case INIT_MANAGER_ANSWER:
+                    enterPassword();        // host is always second to guess
+                    break;
+                case INIT_GAME:
+                case NORMAL:
+                    gameManager.message(message);
+                    break;
             }
-            gameManager.message(message);
             updateView();
         }
     };

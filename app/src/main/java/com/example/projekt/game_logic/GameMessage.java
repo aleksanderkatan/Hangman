@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class GameMessage implements Serializable {
     public static enum MessageType {
-        INIT_MANAGER, INIT_GAME, NORMAL
+        INIT_MANAGER, INIT_MANAGER_ANSWER, INIT_GAME, NORMAL
     }
 
     public final MessageType type;

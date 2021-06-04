@@ -11,7 +11,13 @@ public class GameMessageFactory {
     public static GameMessage produceInitManagerMessage(
             int safetyWords, int pointsToWin, int maxFails, String playerName) {
         GameMessage message = new GameMessage(GameMessage.MessageType.INIT_MANAGER, playerName,
-                '.', safetyWords, pointsToWin, maxFails, false, "");
+                null, safetyWords, pointsToWin, maxFails, false, null);
+        return message;
+    }
+
+    public static GameMessage produceInitManagerAnswerMessage(String playerName) {
+        GameMessage message = new GameMessage(GameMessage.MessageType.INIT_MANAGER_ANSWER, playerName,
+                null, 0, 0, 0, false, null);
         return message;
     }
 
