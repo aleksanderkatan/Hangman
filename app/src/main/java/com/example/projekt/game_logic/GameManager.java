@@ -77,6 +77,12 @@ public class GameManager {
         return currentGame;
     }
 
+    public boolean isSessionFinished() {
+        if (me.getScore() >= pointsToWin) return true;
+        if (you.getScore() >= pointsToWin) return true;
+        return false;
+    }
+
     public int getSafetyWords() { return safetyWords; }
     public int getPointsToWin() { return pointsToWin; }
     public int getMaxFails() { return maxFails; }

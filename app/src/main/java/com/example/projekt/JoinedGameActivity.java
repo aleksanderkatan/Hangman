@@ -71,13 +71,16 @@ public class JoinedGameActivity extends AppCompatActivity {
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
+                gameManager.message(message);
+                keyboard.resetButtons();
+                break;
             case NORMAL:
                 gameManager.message(message);
                 break;
         }
+        updateView();
         if (gameManager.isGameFinished())
             gameEnded();
-        updateView();
     }
 
     @SuppressLint("SetTextI18n")
@@ -160,6 +163,8 @@ public class JoinedGameActivity extends AppCompatActivity {
         }
     }
 
+    // BUTTON ACTIONS
+
     void btKeyPressedAction(Character c) {
         Log.d(TAG, "Key pressed: " + c);
         c = Character.toLowerCase(c);
@@ -180,8 +185,11 @@ public class JoinedGameActivity extends AppCompatActivity {
         return ans;
     }
 
+    // POPUPS
+
     @SuppressLint("SetTextI18n")
     private void gameEnded() {
+        Log.d(TAG, "Game ended popup");
         updateView();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(bcs.context);
@@ -217,8 +225,6 @@ public class JoinedGameActivity extends AppCompatActivity {
                 gameManager.getMe().increaseScore();
             }
         }
-
-
         txtThePassword.setText("The password was: " + gameManager.getCurrentGame().getPassword());
 
 
@@ -226,7 +232,12 @@ public class JoinedGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                keyboard.resetButtons();
+
+                if (gameManager.isSessionFinished()) {
+                    sessionEnded();
+                    return;
+                }
+
                 gameManager.isGuessing = ! gameManager.isGuessing;
                 if (! gameManager.isGuessing) {
                     enterPassword();
@@ -238,6 +249,8 @@ public class JoinedGameActivity extends AppCompatActivity {
     }
 
     private void enterPassword() {
+        Log.d(TAG, "enter password popup");
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View enterPasswordPopup = getLayoutInflater().inflate(R.layout.popup_enter_password, null);
 
@@ -265,6 +278,39 @@ public class JoinedGameActivity extends AppCompatActivity {
             }
         });
 
+        dialog.show();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void sessionEnded() {
+        Log.d(TAG, "Session ended popup");
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final View sessionEndedPopup = getLayoutInflater().inflate(R.layout.popup_session_ended, null);
+
+        dialogBuilder.setView(sessionEndedPopup);
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+
+        TextView txtSessionResult = sessionEndedPopup.findViewById(R.id.txtSessionResult);
+        TextView txtFinalScore = sessionEndedPopup.findViewById(R.id.txtFinalScore);
+        Button btFine = sessionEndedPopup.findViewById(R.id.btFine);
+
+        if (gameManager.getMe().getScore() > gameManager.getYou().getScore()) {
+            txtSessionResult.setText("You won!");
+        } else {
+            txtSessionResult.setText("You lost");
+        }
+        txtFinalScore.setText(txtPlayers.getText());
+
+        btFine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // what to do?
+                dialog.dismiss();
+                startActivity(new Intent(bcs.context, MainActivity.class));
+            }
+        });
         dialog.show();
     }
 }

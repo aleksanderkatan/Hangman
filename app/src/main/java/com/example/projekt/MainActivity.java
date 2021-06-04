@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 sharedPrefEditor.putString("playerName", playerName);
                 sharedPrefEditor.apply();
                 updatePlayerName();
-                dialog.hide();
+                dialog.dismiss();
             }
         });
 
@@ -91,14 +91,29 @@ public class MainActivity extends AppCompatActivity {
     private void multiplayer() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View multiplayerPopup = getLayoutInflater().inflate(R.layout.popup_multiplayer, null);
-        Button join = multiplayerPopup.findViewById(R.id.multiplayerPopup_join);
-        Button host = multiplayerPopup.findViewById(R.id.multiplayerPopup_host);
-
-        host.setOnClickListener(v -> changeActivity(HostGameActivity.class));
-        join.setOnClickListener(v -> changeActivity(JoinGameActivity.class));
 
         dialogBuilder.setView(multiplayerPopup);
         AlertDialog dialog = dialogBuilder.create();
+
+        Button join = multiplayerPopup.findViewById(R.id.multiplayerPopup_join);
+        Button host = multiplayerPopup.findViewById(R.id.multiplayerPopup_host);
+
+        host.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeActivity(HostGameActivity.class);
+                dialog.dismiss();
+            }
+        });
+        join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeActivity(JoinGameActivity.class);
+                dialog.dismiss();
+            }
+        });
+
+
 
         dialog.show();
     }

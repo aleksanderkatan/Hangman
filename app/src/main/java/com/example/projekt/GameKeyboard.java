@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.Layout;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public class GameKeyboard {
+    public final static String TAG = "game keyboard";
     Context context;
     LinearLayout[] keyButtonsLayouts;
     Map<Character, Button> keyButtons;
@@ -84,6 +86,7 @@ public class GameKeyboard {
     }
 
     public void resetButtons() {
+        Log.d(TAG, "Resetting buttons");
         for (Map.Entry<Character, Button> p : keyButtons.entrySet()) {
             Button button = p.getValue();
             button.setClickable(true);

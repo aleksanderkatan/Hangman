@@ -159,10 +159,15 @@ public class JoinGameActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
+//    private int resumeCalls = 0;
 //    @Override
 //    protected void onResume() {
 //        super.onResume();
-//        finish();
+//        Log.d(TAG, "onResume called");
+//        if (resumeCalls >= 1)
+//            finish();
+//        else
+//            resumeCalls += 1;
 //    }
 
     void btConnectAction() {
