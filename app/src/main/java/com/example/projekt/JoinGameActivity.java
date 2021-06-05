@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projekt.adapters.BluetoothDeviceListAdapter;
-import com.example.projekt.adapters.GameEntryListAdapter;
 import com.example.projekt.bluetooth.BluetoothConnectionService;
 
 import java.util.ArrayList;
@@ -196,7 +195,7 @@ public class JoinGameActivity extends AppCompatActivity {
         sharedPrefEditor.putString("StartedGameFrom", "Join");
         sharedPrefEditor.apply();
 
-        Intent switchActivityIntent = new Intent(this, JoinedGameActivity.class);
+        Intent switchActivityIntent = new Intent(this, GameActivity.class);
         startActivity(switchActivityIntent);
     }
 

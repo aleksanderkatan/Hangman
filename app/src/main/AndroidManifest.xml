@@ -16,8 +16,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".JoinedGameActivity" />
+        android:theme="@style/Theme.Projekt">
+        <!--        android:theme="@style/Theme.AppCompat.NoActionBar">-->
+        <activity android:name=".GameActivity" />
         <activity android:name=".HostGameActivity" />
         <activity android:name=".HostWaitingActivity" />
         <activity android:name=".JoinGameActivity" />

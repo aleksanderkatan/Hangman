@@ -3,8 +3,6 @@ package com.example.projekt.adapters;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.graphics.Paint;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.projekt.JoinedGameActivity;
 import com.example.projekt.R;
-import com.example.projekt.bluetooth.BluetoothConnectionService;
 
 import java.util.List;
 import java.util.UUID;

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
         sharedPrefEditor = sharedPref.edit();
 
-        btSingleplayer.setOnClickListener(v -> changeActivity(JoinedGameActivity.class));
+        btSingleplayer.setOnClickListener(v -> changeActivity(GameActivity.class));
         btMultiplayer.setOnClickListener(v -> multiplayer());
         btLog.setOnClickListener(v -> changeActivity(GamesLogActivity.class));
         txtGreet.setOnClickListener(v -> enterName(true));

@@ -2,6 +2,7 @@ package com.example.projekt;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.annotation.SuppressLint;
@@ -30,12 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class JoinedGameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
     public final static String TAG = "JoinedGameActivity";
     BluetoothConnectionService bcs;
     boolean host;
     long beginTimestamp;
 
+    ConstraintLayout lGame;
     TextView txtPlayers, txtGuessing, txtPassword, txtFails;
     GameKeyboard keyboard;
 
@@ -68,11 +70,13 @@ public class JoinedGameActivity extends AppCompatActivity {
                 GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getStringFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
                 beginTimestamp = System.currentTimeMillis();
+                lGame.setVisibility(View.VISIBLE);
                 break;
             case INIT_MANAGER_ANSWER:
                 gameManager.initializeYou(message.playerName);
                 gameManager.isGuessing = false;
                 beginTimestamp = System.currentTimeMillis();
+                lGame.setVisibility(View.VISIBLE);
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
@@ -127,10 +131,13 @@ public class JoinedGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        lGame = findViewById(R.id.lGame);
         txtPlayers = findViewById(R.id.txtPlayers);
         txtGuessing = findViewById(R.id.txtGuessing);
         txtPassword = findViewById(R.id.txtPassword);
         txtFails = findViewById(R.id.txtFails);
+
+        lGame.setVisibility(View.INVISIBLE);
 
         LinearLayout[] keyButtonsLayouts = new LinearLayout[]{findViewById(R.id.loButtons1), findViewById(R.id.loButtons2), findViewById(R.id.loButtons3)};
         keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
