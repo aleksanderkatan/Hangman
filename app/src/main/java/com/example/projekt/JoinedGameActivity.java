@@ -62,10 +62,10 @@ public class JoinedGameActivity extends AppCompatActivity {
             case INIT_MANAGER:
                 Log.d(TAG, "received init manager message");
                 gameManager.initializeOptions(message);
-                gameManager.initializeMe(getFromSharedPref("playerName"));
+                gameManager.initializeMe(getStringFromSharedPref("playerName"));
                 gameManager.initializeYou(message.playerName);
                 gameManager.isGuessing = true;
-                GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getFromSharedPref("playerName"));
+                GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getStringFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
                 beginTimestamp = System.currentTimeMillis();
                 break;
@@ -136,7 +136,7 @@ public class JoinedGameActivity extends AppCompatActivity {
         keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
         keyboard.prepareKeyButtons();
 
-        host = "Host".equals(getFromSharedPref("StartedGameFrom"));
+        host = "Host".equals(getStringFromSharedPref("StartedGameFrom"));
 
         if (host) {       //memory leak handled
             bcs = HostWaitingActivity.bcs;
@@ -161,7 +161,12 @@ public class JoinedGameActivity extends AppCompatActivity {
             Thread thread = new Thread(task);
             thread.start();
         } else {
-            GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 1, 6, getFromSharedPref("playerName"));
+            GameMessage m = GameMessageFactory.produceInitManagerMessage(
+                    getIntFromSharedPref("safetyWords"),
+                    getIntFromSharedPref("pointsToWin"),
+                    getIntFromSharedPref("failsToHang"),
+                    getStringFromSharedPref("playerName")
+            );
             gameManager.initializeOptions(m);
             gameManager.initializeMe(m.playerName);
             bcs.write(GameMessage.toBytes(m));
@@ -182,7 +187,15 @@ public class JoinedGameActivity extends AppCompatActivity {
         db.gameEntryDao().insertGameEntry(entry);
     }
 
-    public String getFromSharedPref(String key) {
+    public int getIntFromSharedPref(String key) {
+        SharedPreferences sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
+        int ans = sharedPref.getInt(key, 10);
+
+        Log.d(TAG, "Extracting from shared pref: " + key + ", " + ans);
+        return ans;
+    }
+
+    public String getStringFromSharedPref(String key) {
         SharedPreferences sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
         String ans = sharedPref.getString(key, null);
 
