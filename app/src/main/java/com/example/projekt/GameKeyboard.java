@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,9 @@ public class GameKeyboard {
                 button.setText(new String(new StringBuilder().append(c)));
                 button.setTextSize(24);
                 button.setPadding(0, 0, 0, 0);
+                button.setBackgroundColor(Color.TRANSPARENT);
+                button.setTypeface(ResourcesCompat.getFont(context, R.font.fonty));
+                button.setTextColor(Color.rgb(0, 0, 0));
                 button.setOnClickListener(new View.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
@@ -90,7 +94,7 @@ public class GameKeyboard {
         for (Map.Entry<Character, Button> p : keyButtons.entrySet()) {
             Button button = p.getValue();
             button.setClickable(true);
-            button.setTextColor(Color.rgb(255, 255, 255));
+            button.setTextColor(Color.rgb(0, 0, 0));
         }
     }
 

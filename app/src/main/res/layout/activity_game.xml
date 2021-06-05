@@ -5,7 +5,9 @@
     android:id="@+id/lGame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    tools:context=".GameActivity"
+    android:background="@drawable/background"
+    >
 
     <TextView
         android:id="@+id/txtPlayers"

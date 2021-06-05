@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:textSize="14sp"
         android:text="Select"
+        android:background="@android:color/transparent"
         />
 
     <TextView
