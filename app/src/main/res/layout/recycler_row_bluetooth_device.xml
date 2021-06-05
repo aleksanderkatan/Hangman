@@ -15,11 +15,9 @@
 
     <TextView
         android:id="@+id/txtBluetoothDevice"
-        android:layout_width="wrap_content"
+        android:layout_width="323dp"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        />
-
+        android:textSize="14sp" />
 
 
 </LinearLayout>

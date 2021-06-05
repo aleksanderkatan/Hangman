@@ -26,6 +26,7 @@ public class GamesLogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_games_log);
 
         btAdd = findViewById(R.id.btAdd);
@@ -47,8 +48,7 @@ public class GamesLogActivity extends AppCompatActivity {
                 entry.player2 = "Worthless imp " + random.nextInt(10000);
                 entry.score1 = random.nextInt(10);
                 entry.score1 = random.nextInt(10);
-                entry.endedPrematurely = random.nextBoolean();
-                entry.begin =System.currentTimeMillis();
+                entry.begin = System.currentTimeMillis();
                 entry.length = random.nextInt(1000)+100;
 
                 saveNewGameEntry(entry);

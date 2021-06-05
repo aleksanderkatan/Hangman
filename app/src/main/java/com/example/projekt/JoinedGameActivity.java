@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.projekt.bluetooth.BluetoothConnectionService;
+import com.example.projekt.database.GameEntry;
+import com.example.projekt.database.ProjectDatabase;
 import com.example.projekt.game_logic.GameInstance;
 import com.example.projekt.game_logic.GameManager;
 import com.example.projekt.game_logic.GameMessage;
@@ -32,6 +34,7 @@ public class JoinedGameActivity extends AppCompatActivity {
     public final static String TAG = "JoinedGameActivity";
     BluetoothConnectionService bcs;
     boolean host;
+    long beginTimestamp;
 
     TextView txtPlayers, txtGuessing, txtPassword, txtFails;
     GameKeyboard keyboard;
@@ -64,10 +67,12 @@ public class JoinedGameActivity extends AppCompatActivity {
                 gameManager.isGuessing = true;
                 GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
+                beginTimestamp = System.currentTimeMillis();
                 break;
             case INIT_MANAGER_ANSWER:
                 gameManager.initializeYou(message.playerName);
                 gameManager.isGuessing = false;
+                beginTimestamp = System.currentTimeMillis();
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
@@ -156,11 +161,33 @@ public class JoinedGameActivity extends AppCompatActivity {
             Thread thread = new Thread(task);
             thread.start();
         } else {
-            GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 3, 6, getFromSharedPref("playerName"));
+            GameMessage m = GameMessageFactory.produceInitManagerMessage(3, 1, 6, getFromSharedPref("playerName"));
             gameManager.initializeOptions(m);
             gameManager.initializeMe(m.playerName);
             bcs.write(GameMessage.toBytes(m));
         }
+    }
+
+    void saveToDatabase() {
+        GameEntry entry = new GameEntry();
+
+        entry.player1 = gameManager.getMe().name;
+        entry.player2 = gameManager.getYou().name;
+        entry.score1 = gameManager.getMe().getScore();
+        entry.score1 = gameManager.getYou().getScore();
+        entry.begin = beginTimestamp;
+        entry.length = System.currentTimeMillis() - beginTimestamp;
+
+        ProjectDatabase db = ProjectDatabase.getDatabaseInstance(this.getApplicationContext());
+        db.gameEntryDao().insertGameEntry(entry);
+    }
+
+    public String getFromSharedPref(String key) {
+        SharedPreferences sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
+        String ans = sharedPref.getString(key, null);
+
+        Log.d(TAG, "Extracting from shared pref: " + key + ", " + ans);
+        return ans;
     }
 
     // BUTTON ACTIONS
@@ -177,20 +204,11 @@ public class JoinedGameActivity extends AppCompatActivity {
         bcs.write(GameMessage.toBytes(message));
     }
 
-    public String getFromSharedPref(String key) {
-        SharedPreferences sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
-        String ans = sharedPref.getString(key, null);
-
-        Log.d(TAG, "Extracting from shared pref: " + key + ", " + ans);
-        return ans;
-    }
-
     // POPUPS
 
     @SuppressLint("SetTextI18n")
     private void gameEnded() {
         Log.d(TAG, "Game ended popup");
-        updateView();
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(bcs.context);
         final View gameEndedPopup = getLayoutInflater().inflate(R.layout.popup_game_ended, null);
@@ -227,6 +245,7 @@ public class JoinedGameActivity extends AppCompatActivity {
         }
         txtThePassword.setText("The password was: " + gameManager.getCurrentGame().getPassword());
 
+        updateView();
 
         btProceed.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +321,8 @@ public class JoinedGameActivity extends AppCompatActivity {
             txtSessionResult.setText("You lost");
         }
         txtFinalScore.setText(txtPlayers.getText());
+
+        saveToDatabase();
 
         btFine.setOnClickListener(new View.OnClickListener() {
             @Override

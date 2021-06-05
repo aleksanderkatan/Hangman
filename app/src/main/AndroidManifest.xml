@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".JoinedGameActivity" />
-        <activity android:name=".HostedGameActivity" />
         <activity android:name=".HostGameActivity" />
         <activity android:name=".HostWaitingActivity" />
         <activity android:name=".JoinGameActivity" />

@@ -29,7 +29,4 @@ public class GameEntry {
 
     @ColumnInfo(name = "length_millis")
     public long length;
-
-    @ColumnInfo(name = "ended_prematurely")
-    public boolean endedPrematurely;
 }
