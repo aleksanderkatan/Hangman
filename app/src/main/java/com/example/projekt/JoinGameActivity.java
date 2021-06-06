@@ -141,17 +141,21 @@ public class JoinGameActivity extends AppCompatActivity {
         });
         btConnect.setVisibility(View.INVISIBLE);
 
+        txtSearching = findViewById(R.id.txtSearching);
+        txtSearching.setVisibility(View.INVISIBLE);
+
         btDiscover = findViewById(R.id.btDiscover);
         btDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "discovering...");
                 btConnect.setVisibility(View.INVISIBLE);
+                txtSearching.setVisibility(View.VISIBLE);
                 discover(v);
             }
         });
 
-        txtSearching = findViewById(R.id.txtSearching);
+
 
         bcs = new BluetoothConnectionService();
         connectionDevice = new ArrayList<>();

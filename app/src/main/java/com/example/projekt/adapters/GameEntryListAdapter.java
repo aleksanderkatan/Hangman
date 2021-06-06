@@ -58,6 +58,7 @@ public class GameEntryListAdapter extends RecyclerView.Adapter<GameEntryListAdap
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(entry.length))
         ));
         text.append("\n");
+        text.append("\n");
 
         holder.txtGameEntry.setText(text);
     }

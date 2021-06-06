@@ -37,7 +37,7 @@ public class GameActivity extends AppCompatActivity {
     long beginTimestamp;
 
     ConstraintLayout lGame;
-    TextView txtPlayers, txtGuessing, txtPassword, txtFails;
+    TextView txtPlayers, txtGuessing, txtPassword, txtFails, txtEstablishing;
     ImageView imHangman;
     GameKeyboard keyboard;
 
@@ -60,6 +60,7 @@ public class GameActivity extends AppCompatActivity {
     };
 
     private void manageMessage(GameMessage message) {
+
         switch (message.type) {
             case INIT_MANAGER:
                 Log.d(TAG, "received init manager message");
@@ -70,14 +71,17 @@ public class GameActivity extends AppCompatActivity {
                 GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getStringFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
                 beginTimestamp = System.currentTimeMillis();
+                txtEstablishing.setText("Waiting for\nfirst password...");
                 break;
             case INIT_MANAGER_ANSWER:
                 gameManager.initializeYou(message.playerName);
                 gameManager.isGuessing = false;
                 beginTimestamp = System.currentTimeMillis();
+                txtEstablishing.setText("Waiting for\nfirst password...");
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
+                txtEstablishing.setVisibility(View.INVISIBLE);
                 lGame.setVisibility(View.VISIBLE);
                 gameManager.message(message);
                 keyboard.resetButtons();
@@ -173,6 +177,7 @@ public class GameActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txtPassword);
         txtFails = findViewById(R.id.txtFails);
         imHangman = findViewById(R.id.imHangman);
+        txtEstablishing = findViewById(R.id.txtEstablishingConnection);
 
         lGame.setVisibility(View.INVISIBLE);
 
@@ -311,7 +316,7 @@ public class GameActivity extends AppCompatActivity {
                 gameManager.getMe().increaseScore();
             }
         }
-        txtThePassword.setText("The password was: " + gameManager.getCurrentGame().getPassword());
+        txtThePassword.setText("The password was:\n" + gameManager.getCurrentGame().getPassword());
 
         updateView();
 

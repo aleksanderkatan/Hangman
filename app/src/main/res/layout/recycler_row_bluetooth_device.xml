@@ -2,23 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:orientation="horizontal"
-    >
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <Button
         android:id="@+id/btPair"
-        android:layout_width="wrap_content"
+        android:layout_width="112dp"
         android:layout_height="match_parent"
-        android:textSize="14sp"
-        android:text="Select"
         android:background="@android:color/transparent"
-        />
+        android:text="Select"
+        android:textSize="32sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txtBluetoothDevice"
-        android:layout_width="323dp"
-        android:layout_height="wrap_content"
-        android:textSize="14sp" />
+        android:layout_width="295dp"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:textSize="24sp" />
 
 
 </LinearLayout>
