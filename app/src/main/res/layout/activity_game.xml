@@ -2,115 +2,133 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/lGame"
+    android:id="@+id/lGameBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameActivity"
-    android:background="@drawable/background"
-    >
+    android:background="@drawable/background">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/lGame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".GameActivity"
+        >
 
-    <TextView
-        android:id="@+id/txtPlayers"
-        android:layout_width="318dp"
-        android:layout_height="21dp"
-        android:gravity="center"
-        android:text="Player1 vs Player2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.172"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
-
-    <TextView
-        android:id="@+id/txtPassword"
-        android:layout_width="172dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center"
-        android:text="password"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/txtHangman"
-        app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
-        app:layout_constraintVertical_bias="0.174" />
-
-    <TextView
-        android:id="@+id/txtGuessing"
-        android:layout_width="186dp"
-        android:layout_height="21dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="You're spectating"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.368"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPlayers"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/txtHangman"
-        android:layout_width="187dp"
-        android:layout_height="210dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="hangman placegolder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.071"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <LinearLayout
-        android:id="@+id/loButtons"
-        android:layout_width="376dp"
-        android:layout_height="198dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFails"
-        app:layout_constraintVertical_bias="0.442">
-
-        <LinearLayout
-            android:id="@+id/loButtons1"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"></LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/loButtons2"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+        <TextView
+            android:id="@+id/txtPlayers"
+            android:layout_width="318dp"
+            android:layout_height="21dp"
             android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
+            android:text="Player1 vs Player2"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.172"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.022" />
+
+        <TextView
+            android:id="@+id/txtPassword"
+            android:layout_width="257dp"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:text="password"
+            android:textSize="32sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtFails"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/txtGuessing"
+            android:layout_width="186dp"
+            android:layout_height="21dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="You're spectating"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.368"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPlayers"
+            app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
-            android:id="@+id/loButtons3"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:id="@+id/loButtons"
+            android:layout_width="376dp"
+            android:layout_height="198dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.476"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtPassword"
+            app:layout_constraintVertical_bias="0.442">
+
+            <LinearLayout
+                android:id="@+id/loButtons1"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loButtons2"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:orientation="horizontal"></LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/loButtons3"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:orientation="horizontal"></LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtFails"
+            android:layout_width="188dp"
+            android:layout_height="22dp"
             android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
-    </LinearLayout>
+            android:text="Fails: 0/0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imHangmanGray"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/txtFails"
-        android:layout_width="188dp"
-        android:layout_height="22dp"
-        android:gravity="center"
-        android:text="Fails: 0/0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHangman"
-        app:layout_constraintVertical_bias="0.0" />
+        <ImageView
+            android:id="@+id/imHangmanGray"
+            android:layout_width="245dp"
+            android:layout_height="247dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/hangman_gray" />
 
+        <ImageView
+            android:id="@+id/imHangman"
+            android:layout_width="245dp"
+            android:layout_height="247dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtGuessing"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/hangman10" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

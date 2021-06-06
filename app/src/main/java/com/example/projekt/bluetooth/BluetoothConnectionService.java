@@ -280,6 +280,10 @@ public class BluetoothConnectionService implements Serializable {
      * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
+    public boolean isConnected() {
+        return connectedThread != null;
+    }
+
     public void write(byte[] out) {
         Log.d(TAG, "write: Write Called.");
         //perform the write

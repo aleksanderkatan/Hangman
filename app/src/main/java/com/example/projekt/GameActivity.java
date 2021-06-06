@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,8 +28,6 @@ import com.example.projekt.game_logic.GameManager;
 import com.example.projekt.game_logic.GameMessage;
 import com.example.projekt.game_logic.GameMessageFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
@@ -39,6 +38,7 @@ public class GameActivity extends AppCompatActivity {
 
     ConstraintLayout lGame;
     TextView txtPlayers, txtGuessing, txtPassword, txtFails;
+    ImageView imHangman;
     GameKeyboard keyboard;
 
     GameManager gameManager;
@@ -70,16 +70,15 @@ public class GameActivity extends AppCompatActivity {
                 GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getStringFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
                 beginTimestamp = System.currentTimeMillis();
-                lGame.setVisibility(View.VISIBLE);
                 break;
             case INIT_MANAGER_ANSWER:
                 gameManager.initializeYou(message.playerName);
                 gameManager.isGuessing = false;
                 beginTimestamp = System.currentTimeMillis();
-                lGame.setVisibility(View.VISIBLE);
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
+                lGame.setVisibility(View.VISIBLE);
                 gameManager.message(message);
                 keyboard.resetButtons();
                 break;
@@ -123,6 +122,43 @@ public class GameActivity extends AppCompatActivity {
         s.append(gameManager.getMaxFails());
         txtFails.setText(new String(s));
 
+        // my favourite part of code
+        switch (gameManager.getMaxFails()-gameManager.getFails()) {
+            case 9:
+                imHangman.setImageResource(R.drawable.hangman9);
+                break;
+            case 8:
+                imHangman.setImageResource(R.drawable.hangman8);
+                break;
+            case 7:
+                imHangman.setImageResource(R.drawable.hangman7);
+                break;
+            case 6:
+                imHangman.setImageResource(R.drawable.hangman6);
+                break;
+            case 5:
+                imHangman.setImageResource(R.drawable.hangman5);
+                break;
+            case 4:
+                imHangman.setImageResource(R.drawable.hangman4);
+                break;
+            case 3:
+                imHangman.setImageResource(R.drawable.hangman3);
+                break;
+            case 2:
+                imHangman.setImageResource(R.drawable.hangman2);
+                break;
+            case 1:
+                imHangman.setImageResource(R.drawable.hangman1);
+                break;
+            case 0:
+                imHangman.setImageResource(R.drawable.hangman0);
+                break;
+            default:
+                imHangman.setImageResource(R.drawable.hangman10);
+                break;
+        }
+
         keyboard.updateButtons(gameManager.getCurrentGame().getGuessedCharacters());
     }
 
@@ -136,6 +172,7 @@ public class GameActivity extends AppCompatActivity {
         txtGuessing = findViewById(R.id.txtGuessing);
         txtPassword = findViewById(R.id.txtPassword);
         txtFails = findViewById(R.id.txtFails);
+        imHangman = findViewById(R.id.imHangman);
 
         lGame.setVisibility(View.INVISIBLE);
 
@@ -158,10 +195,20 @@ public class GameActivity extends AppCompatActivity {
 
         if (!host) {            // ! change that
             Runnable task = () -> {
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                for (int i = 0; i< 30; i++) {
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (bcs.isConnected()) {
+                        Log.d(TAG, "connected after " + i + " tries");
+                        break;
+                    }
+                }
+                if (! bcs.isConnected()) {
+                    Log.d(TAG, "Connection failed to establish");
+                    finish();
                 }
                 bcs.write("Let's play!".getBytes());
             };
@@ -253,6 +300,7 @@ public class GameActivity extends AppCompatActivity {
                 gameManager.getYou().increaseScore();
             }
         } else {
+            txtGuessing.setText("You're waiting!");
             if (gameManager.guesserWon()) {
                 txtResult.setText("You lost this round");
                 txtComment.setText("Your opponent guessed correctly");
@@ -280,8 +328,10 @@ public class GameActivity extends AppCompatActivity {
                 gameManager.isGuessing = ! gameManager.isGuessing;
                 if (! gameManager.isGuessing) {
                     enterPassword();
+                } else {
+                    txtGuessing.setText("You're waiting!");
+                    keyboard.disableButtons();
                 }
-                updateView();
             }
         });
         dialog.show();

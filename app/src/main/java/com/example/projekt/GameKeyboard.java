@@ -49,7 +49,7 @@ public class GameKeyboard {
                 Character c = characters[j];
                 Button button = new Button(context);
                 button.setText(new String(new StringBuilder().append(c)));
-                button.setTextSize(24);
+                button.setTextSize(32);
                 button.setPadding(0, 0, 0, 0);
                 button.setBackgroundColor(Color.TRANSPARENT);
                 button.setTypeface(ResourcesCompat.getFont(context, R.font.fonty));
@@ -82,9 +82,9 @@ public class GameKeyboard {
             if (button == null) return;
             button.setClickable(false);
             if (p.getValue()) {
-                button.setTextColor(Color.rgb(0, 128, 0));
+                button.setTextColor(Color.rgb(0, 64*3-1, 0));
             } else {
-                button.setTextColor(Color.rgb(128, 0, 0));
+                button.setTextColor(Color.rgb(64*4-1, 0, 0));
             }
         }
     }
@@ -95,6 +95,14 @@ public class GameKeyboard {
             Button button = p.getValue();
             button.setClickable(true);
             button.setTextColor(Color.rgb(0, 0, 0));
+        }
+    }
+
+    public void disableButtons() {
+        Log.d(TAG, "Disabling buttons");
+        for (Map.Entry<Character, Button> p : keyButtons.entrySet()) {
+            Button button = p.getValue();
+            button.setClickable(false);
         }
     }
 
