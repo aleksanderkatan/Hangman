@@ -9,8 +9,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class GameMessage implements Serializable {
-    public static enum MessageType {
-        INIT_MANAGER, INIT_MANAGER_ANSWER, INIT_GAME, NORMAL
+    public enum MessageType {
+        INIT_MANAGER, INIT_MANAGER_ANSWER, INIT_GAME, NORMAL, HINT
     }
 
     public final MessageType type;
@@ -19,20 +19,20 @@ public class GameMessage implements Serializable {
     public final int safetyWords;
     public final int pointsToWin;
     public final int maxFails;
-    public final boolean guessing;
+    public final int maxHints;
     public final String word;
 
 
     public GameMessage(MessageType type, String playerName, Character character,
-                       int safetyWords, int pointsToWin, int maxFails,
-                       boolean guessing, String word) {
+                       int safetyWords, int pointsToWin, int maxFails, int maxHints,
+                       String word) {
         this.type = type;
         this.playerName = playerName;
         this.character = character;
         this.safetyWords = safetyWords;
         this.pointsToWin = pointsToWin;
         this.maxFails = maxFails;
-        this.guessing = guessing;
+        this.maxHints = maxHints;
         this.word = word;
     }
 

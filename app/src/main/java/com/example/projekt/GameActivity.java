@@ -37,8 +37,9 @@ public class GameActivity extends AppCompatActivity {
     long beginTimestamp;
 
     ConstraintLayout lGame;
-    TextView txtPlayers, txtGuessing, txtPassword, txtFails, txtEstablishing;
-    ImageView imHangman;
+    TextView txtPlayers, txtGuessing, txtPassword, txtFails, txtEstablishing,
+            txtMyHints, txtYourHints, txtTargetScore;
+    ImageView imHangman, imHint;
     GameKeyboard keyboard;
 
     GameManager gameManager;
@@ -82,11 +83,13 @@ public class GameActivity extends AppCompatActivity {
                 break;
             case INIT_GAME:
                 txtEstablishing.setVisibility(View.INVISIBLE);
+                txtTargetScore.setText(String.valueOf(gameManager.getPointsToWin()));
                 lGame.setVisibility(View.VISIBLE);
                 gameManager.message(message);
                 keyboard.resetButtons();
                 break;
             case NORMAL:
+            case HINT:
                 gameManager.message(message);
                 break;
         }
@@ -164,6 +167,9 @@ public class GameActivity extends AppCompatActivity {
         }
 
         keyboard.updateButtons(gameManager.getCurrentGame().getGuessedCharacters());
+
+        txtMyHints.setText("Hints: " + gameManager.getMe().getRemainingHints());
+        txtYourHints.setText("Enemy's: " + gameManager.getYou().getRemainingHints());
     }
 
     @Override
@@ -178,12 +184,19 @@ public class GameActivity extends AppCompatActivity {
         txtFails = findViewById(R.id.txtFails);
         imHangman = findViewById(R.id.imHangman);
         txtEstablishing = findViewById(R.id.txtEstablishingConnection);
+        txtMyHints = findViewById(R.id.txtMyHints);
+        txtYourHints = findViewById(R.id.txtYourHints);
+        imHint = findViewById(R.id.imHint);
+        txtTargetScore = findViewById(R.id.txtTargetScore);
+
+        imHint.setOnClickListener(v -> btHintPressedAction());
 
         lGame.setVisibility(View.INVISIBLE);
 
         LinearLayout[] keyButtonsLayouts = new LinearLayout[]{findViewById(R.id.loButtons1), findViewById(R.id.loButtons2), findViewById(R.id.loButtons3)};
         keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
         keyboard.prepareKeyButtons();
+
 
         host = "Host".equals(getStringFromSharedPref("StartedGameFrom"));
 
@@ -224,6 +237,7 @@ public class GameActivity extends AppCompatActivity {
                     getIntFromSharedPref("safetyWords"),
                     getIntFromSharedPref("pointsToWin"),
                     getIntFromSharedPref("failsToHang"),
+                    getIntFromSharedPref("hints"),
                     getStringFromSharedPref("playerName")
             );
             gameManager.initializeOptions(m);
@@ -274,6 +288,20 @@ public class GameActivity extends AppCompatActivity {
         manageMessage(message);
         updateView();
         bcs.write(GameMessage.toBytes(message));
+    }
+
+    void btHintPressedAction() {
+        Log.d(TAG, "Called for hint");
+        if (gameManager.getCurrentGame() == null) return;
+        if (gameManager.isGameFinished()) return;
+        if (gameManager.getMe().getRemainingHints() == 0) return;
+        if (! gameManager.isGuessing) return;
+        Log.d(TAG, "Successfully");
+
+        GameMessage m = GameMessageFactory.produceHintMessage();
+        manageMessage(m);
+        bcs.write(GameMessage.toBytes(m));
+        updateView();
     }
 
     // POPUPS
@@ -361,8 +389,8 @@ public class GameActivity extends AppCompatActivity {
                 String word = password.getText().toString();
                 if (word.length() < 1) return;
 
-                GameMessage myMessage = GameMessageFactory.produceInitGameMessage(false, word);
-                GameMessage yourMessage = GameMessageFactory.produceInitGameMessage(true, word);
+                GameMessage myMessage = GameMessageFactory.produceInitGameMessage(word);
+                GameMessage yourMessage = GameMessageFactory.produceInitGameMessage(word);
 
                 manageMessage(myMessage);
                 bcs.write(GameMessage.toBytes(yourMessage));

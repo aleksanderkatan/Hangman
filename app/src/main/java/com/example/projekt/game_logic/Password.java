@@ -43,6 +43,16 @@ public class Password {
         return new String(answer);
     }
 
+    public Character getHint() {
+        for (int i = 0; i< word.length(); i++) {
+            char c = word.charAt(i);
+            if (! (c == ' ' || c == '-' || chars.get(c) != null)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public String getPassword() {
         return word;
     }

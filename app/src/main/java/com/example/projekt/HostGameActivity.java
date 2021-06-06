@@ -1,12 +1,7 @@
 package com.example.projekt;
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,13 +14,11 @@ import android.content.Context;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 public class HostGameActivity extends AppCompatActivity {
     private static final String TAG = "HostGameActivity";
-    TextView numPointsToWin, numFailsToHang, numSafetyWords;
-    CheckBox cbSafetyWords;
+    TextView numPointsToWin, numFailsToHang, numHints;
+    CheckBox cbSafetyWords, cbHints;
     Button btPlay;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -37,17 +30,18 @@ public class HostGameActivity extends AppCompatActivity {
         numPointsToWin = findViewById(R.id.numPointsToWin);
         numFailsToHang = findViewById(R.id.numFailsToHang);
         cbSafetyWords = findViewById(R.id.cbSafetyWords);
-        numSafetyWords = findViewById(R.id.numSafetyWords);
+        numHints = findViewById(R.id.numHints);
         btPlay = findViewById(R.id.btPlay);
+        cbHints = findViewById(R.id.cbHints);
 
         numPointsToWin.setText("3");
         numFailsToHang.setText("6");
-        numSafetyWords.setText("3");
+        numHints.setText("3");
 
-        cbSafetyWords.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        cbHints.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                numSafetyWords.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
+                numHints.setVisibility(isChecked ? View.VISIBLE : View.INVISIBLE);
             }
         });
 
@@ -57,19 +51,20 @@ public class HostGameActivity extends AppCompatActivity {
                 int pointsToWin = Integer.parseInt(numPointsToWin.getText().toString());
                 int failsToHang = Integer.parseInt(numFailsToHang.getText().toString());
                 int safetyWords = 0;
-                if (cbSafetyWords.isChecked()) {
-                    safetyWords = Integer.parseInt(numSafetyWords.getText().toString());
-                }
+                if (cbSafetyWords.isChecked()) safetyWords=1;   //boolean
+                int hints = Integer.parseInt(numHints.getText().toString());
 
                 Log.d(TAG, new String(
                         new StringBuilder("Options: ").append(pointsToWin)
                                 .append(" ").append(failsToHang)
                                 .append(" ").append(safetyWords)
+                                .append(" ").append(hints)
                         ));
 
                 putIntoSharedPref("pointsToWin", pointsToWin);
                 putIntoSharedPref("failsToHang", failsToHang);
                 putIntoSharedPref("safetyWords", safetyWords);
+                putIntoSharedPref("hints", hints);
 
                 Intent intent = new Intent(getBaseContext(), HostWaitingActivity.class);
 

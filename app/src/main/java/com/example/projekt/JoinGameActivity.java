@@ -43,7 +43,7 @@ public class JoinGameActivity extends AppCompatActivity {
             UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
 
 
-    private BroadcastReceiver broadcastReceiver3 = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver3 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();

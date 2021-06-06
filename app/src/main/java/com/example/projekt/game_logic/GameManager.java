@@ -11,6 +11,7 @@ public class GameManager {
     private int safetyWords;
     private int pointsToWin;
     private int maxFails;
+    private int maxHints;
     public boolean isGuessing;
 
     private Player me;
@@ -20,11 +21,14 @@ public class GameManager {
         safetyWords = initMessage.safetyWords;
         pointsToWin = initMessage.pointsToWin;
         maxFails = initMessage.maxFails;
+        maxHints = initMessage.maxHints;
+        me.setRemainingHints(initMessage.maxHints);
+        you.setRemainingHints(initMessage.maxHints);
     }
 
     public GameManager() {
-        me = new Player("Me");
-        you = new Player("You");
+        me = new Player("Me", maxHints);
+        you = new Player("You", maxHints);
         safetyWords = 0;
         pointsToWin = 10000;
         maxFails = 10000;
@@ -33,6 +37,7 @@ public class GameManager {
     public void message(GameMessage message) {
         switch (message.type) {
             case INIT_MANAGER:
+            case INIT_MANAGER_ANSWER:
                 break;
             case INIT_GAME:
                 currentGame = new GameInstance();
@@ -40,14 +45,19 @@ public class GameManager {
                 break;
             case NORMAL:
                 currentGame.move(message.character);
+                break;
+            case HINT:
+                if (isGuessing) me.decreaseRemainingHints();
+                else you.decreaseRemainingHints();
+                currentGame.hint();
+                break;
         }
     }
 
     public boolean isGameFinished() {
         if (currentGame == null) return false;
         if (currentGame.getFails() >= maxFails) return true;
-        if (currentGame.isEntirelyGuessed()) return true;
-        return false;
+        return currentGame.isEntirelyGuessed();
     }
 
     public boolean guesserWon() {
@@ -58,7 +68,7 @@ public class GameManager {
     }
 
     public void initializeMe(String name) {
-        me = new Player(name);
+        me = new Player(name, maxHints);
     }
 
     public Player getMe() {
@@ -66,7 +76,7 @@ public class GameManager {
     }
 
     public void initializeYou(String name) {
-        you = new Player(name);
+        you = new Player(name, maxHints);
     }
 
     public Player getYou() {
@@ -79,8 +89,7 @@ public class GameManager {
 
     public boolean isSessionFinished() {
         if (me.getScore() >= pointsToWin) return true;
-        if (you.getScore() >= pointsToWin) return true;
-        return false;
+        return you.getScore() >= pointsToWin;
     }
 
     public int getSafetyWords() { return safetyWords; }

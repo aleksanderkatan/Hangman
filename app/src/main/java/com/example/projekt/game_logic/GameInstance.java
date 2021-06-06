@@ -16,11 +16,16 @@ public class GameInstance {
     public GameInstance() {}
 
     public void move(Character c) {
+        if (c == null) return;
         password.guess(c);
 
         if (! password.isInPassword(c)) {
             fails += 1;
         }
+    }
+
+    public void hint() {
+        move(password.getHint());
     }
 
     public int getFails() {
