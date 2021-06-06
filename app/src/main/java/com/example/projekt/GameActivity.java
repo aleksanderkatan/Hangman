@@ -233,7 +233,7 @@ public class GameActivity extends AppCompatActivity {
         entry.player1 = gameManager.getMe().name;
         entry.player2 = gameManager.getYou().name;
         entry.score1 = gameManager.getMe().getScore();
-        entry.score1 = gameManager.getYou().getScore();
+        entry.score2 = gameManager.getYou().getScore();
         entry.begin = beginTimestamp;
         entry.length = System.currentTimeMillis() - beginTimestamp;
 
