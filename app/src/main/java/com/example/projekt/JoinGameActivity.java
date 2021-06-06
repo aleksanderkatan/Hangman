@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -30,8 +31,8 @@ import java.util.UUID;
 public class JoinGameActivity extends AppCompatActivity {
     static public final String TAG = "JoinGameActivity";
     RecyclerView rv;
-    Button btDiscover;
-    Button btConnect;
+    Button btDiscover, btConnect;
+    TextView txtSearching;
     BluetoothDeviceListAdapter adapter;
     public ArrayList<BluetoothDevice> bluetoothDevices;
     BluetoothAdapter bluetoothAdapter;
@@ -57,7 +58,7 @@ public class JoinGameActivity extends AppCompatActivity {
         }
     };
 
-    private final BroadcastReceiver mBroadcastReceiver4 = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver4 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -68,8 +69,9 @@ public class JoinGameActivity extends AppCompatActivity {
                 //case1: bonded already
                 if (device.getBondState() == BluetoothDevice.BOND_BONDED){
                     Log.d(TAG, "BroadcastReceiver: BOND_BONDED.");
+                    btConnect.setVisibility(View.VISIBLE);
                 }
-                //case2: creating a bone
+                //case2: creating a bond
                 if (device.getBondState() == BluetoothDevice.BOND_BONDING) {
                     Log.d(TAG, "BroadcastReceiver: BOND_BONDING.");
                 }
@@ -127,6 +129,8 @@ public class JoinGameActivity extends AppCompatActivity {
 
         IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(broadcastReceiver3, discoverDevicesIntent);
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(broadcastReceiver4, filter);
 
         btConnect = findViewById(R.id.btConnect);
         btConnect.setOnClickListener(new View.OnClickListener() {
@@ -135,16 +139,19 @@ public class JoinGameActivity extends AppCompatActivity {
                 btConnectAction();
             }
         });
-
+        btConnect.setVisibility(View.INVISIBLE);
 
         btDiscover = findViewById(R.id.btDiscover);
         btDiscover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "discovering...");
+                btConnect.setVisibility(View.INVISIBLE);
                 discover(v);
             }
         });
+
+        txtSearching = findViewById(R.id.txtSearching);
 
         bcs = new BluetoothConnectionService();
         connectionDevice = new ArrayList<>();
@@ -153,7 +160,7 @@ public class JoinGameActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         rv.addItemDecoration(dividerItemDecoration);
-        adapter = new BluetoothDeviceListAdapter(this, bluetoothAdapter, connectionDevice);
+        adapter = new BluetoothDeviceListAdapter(this, bluetoothAdapter, connectionDevice, btConnect);
         adapter.setBluetoothDeviceListAdapter(bluetoothDevices);
         rv.setAdapter(adapter);
     }

@@ -1,5 +1,6 @@
 package com.example.projekt.adapters;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -24,16 +25,15 @@ public class BluetoothDeviceListAdapter extends RecyclerView.Adapter<BluetoothDe
     private List<BluetoothDevice> bluetoothDevices;
     private static BluetoothAdapter bluetoothAdapter;
     private static List<BluetoothDevice> deviceReference;
-
-    public void startBTConnection(BluetoothDevice device, UUID uuid) {
-
-    }
+    private static Button btConnect;
 
 
-    public BluetoothDeviceListAdapter(Context context, BluetoothAdapter bluetoothAdapter,List<BluetoothDevice> device) {
+    public BluetoothDeviceListAdapter(Context context, BluetoothAdapter bluetoothAdapter,
+                                      List<BluetoothDevice> device, Button btConnect) {
         this.context = context;
         BluetoothDeviceListAdapter.bluetoothAdapter = bluetoothAdapter;
-        this.deviceReference = device;
+        deviceReference = device;
+        BluetoothDeviceListAdapter.btConnect = btConnect;
     }
 
     public void setBluetoothDeviceListAdapter(List<BluetoothDevice> bluetoothDevices) {
@@ -70,12 +70,18 @@ public class BluetoothDeviceListAdapter extends RecyclerView.Adapter<BluetoothDe
             txtBluetoothDevice = itemView.findViewById(R.id.txtBluetoothDevice);
             btPair = itemView.findViewById(R.id.btPair);
             btPair.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
                     bluetoothAdapter.cancelDiscovery();
                     Log.d(TAG, "onItemClick: You Clicked on a device.");
                     deviceReference.clear();
                     deviceReference.add(device);
+                    btConnect.setText("Play with " + device.getName());
+                    if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
+                        Log.d(TAG, "Already bonded!");
+                        btConnect.setVisibility(View.VISIBLE);
+                    }
                     device.createBond();
                 }
             });
