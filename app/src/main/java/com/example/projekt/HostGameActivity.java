@@ -53,6 +53,7 @@ public class HostGameActivity extends AppCompatActivity {
                 int safetyWords = 0;
                 if (cbSafetyWords.isChecked()) safetyWords=1;   //boolean
                 int hints = Integer.parseInt(numHints.getText().toString());
+                if (! cbHints.isChecked()) hints = 0;
 
                 Log.d(TAG, new String(
                         new StringBuilder("Options: ").append(pointsToWin)

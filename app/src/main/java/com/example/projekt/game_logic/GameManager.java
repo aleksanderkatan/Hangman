@@ -8,7 +8,7 @@ public class GameManager {
     public final static String TAG = "GameManager";
     GameInstance currentGame;
 
-    private int safetyWords;
+    private boolean safetyWords;
     private int pointsToWin;
     private int maxFails;
     private int maxHints;
@@ -18,20 +18,25 @@ public class GameManager {
     private Player you;
 
     public void initializeOptions(GameMessage initMessage) {
-        safetyWords = initMessage.safetyWords;
+        if (initMessage.safetyWords == 0) {
+            safetyWords = false;
+        } else {
+            safetyWords = true;
+        }
         pointsToWin = initMessage.pointsToWin;
         maxFails = initMessage.maxFails;
         maxHints = initMessage.maxHints;
-        me.setRemainingHints(initMessage.maxHints);
-        you.setRemainingHints(initMessage.maxHints);
+        me.setRemainingHints(maxHints);
+        you.setRemainingHints(maxHints);
     }
 
     public GameManager() {
         me = new Player("Me", maxHints);
         you = new Player("You", maxHints);
-        safetyWords = 0;
+        safetyWords = false;
         pointsToWin = 10000;
         maxFails = 10000;
+        maxHints = 0;
     }
 
     public void message(GameMessage message) {
@@ -92,8 +97,9 @@ public class GameManager {
         return you.getScore() >= pointsToWin;
     }
 
-    public int getSafetyWords() { return safetyWords; }
+    public boolean withSafetyWords() { return safetyWords; }
     public int getPointsToWin() { return pointsToWin; }
     public int getMaxFails() { return maxFails; }
     public int getFails() { return currentGame.getFails(); }
+    public int getMaxHints() { return maxHints; }
 }

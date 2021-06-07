@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,19 @@ import com.example.projekt.game_logic.GameManager;
 import com.example.projekt.game_logic.GameMessage;
 import com.example.projekt.game_logic.GameMessageFactory;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 public class GameActivity extends AppCompatActivity {
     public final static String TAG = "JoinedGameActivity";
@@ -43,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
     GameKeyboard keyboard;
 
     GameManager gameManager;
+    List<String> passwords;
 
 
     private final BroadcastReceiver broadcastReceiver5 = new BroadcastReceiver() {
@@ -168,8 +182,10 @@ public class GameActivity extends AppCompatActivity {
 
         keyboard.updateButtons(gameManager.getCurrentGame().getGuessedCharacters());
 
-        txtMyHints.setText("Hints: " + gameManager.getMe().getRemainingHints());
-        txtYourHints.setText("Enemy's: " + gameManager.getYou().getRemainingHints());
+        if (gameManager.getMaxHints() > 0) {
+            txtMyHints.setText("Hints: " + gameManager.getMe().getRemainingHints());
+            txtYourHints.setText("Enemy's: " + gameManager.getYou().getRemainingHints());
+        }
     }
 
     @Override
@@ -177,6 +193,24 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        // initialize passwords
+        passwords = new ArrayList<>();
+        Resources res = getResources();
+        InputStream in = res.openRawResource(R.raw.filtered_words);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        try {
+            line = reader.readLine();
+            while (line != null) {
+                if (line.length() > 3)
+                    passwords.add(line);
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //initialize view
         lGame = findViewById(R.id.lGame);
         txtPlayers = findViewById(R.id.txtPlayers);
         txtGuessing = findViewById(R.id.txtGuessing);
@@ -197,7 +231,7 @@ public class GameActivity extends AppCompatActivity {
         keyboard = new GameKeyboard(this, keyButtonsLayouts, this::btKeyPressedAction);
         keyboard.prepareKeyButtons();
 
-
+        //bcs
         host = "Host".equals(getStringFromSharedPref("StartedGameFrom"));
 
         if (host) {       //memory leak handled
@@ -380,8 +414,34 @@ public class GameActivity extends AppCompatActivity {
         AlertDialog dialog = dialogBuilder.create();
         dialog.setCancelable(false);
 
+        LinearLayout lSafety = enterPasswordPopup.findViewById(R.id.loSafetyWords);
         EditText password = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_password);
         Button confirm = enterPasswordPopup.findViewById(R.id.enterPasswordPopup_confirm);
+
+        if (gameManager.withSafetyWords()) {
+            lSafety.setVisibility(View.VISIBLE);
+            Collections.shuffle(passwords);
+            List<Button> buttons = new ArrayList<>();
+            buttons.add(enterPasswordPopup.findViewById(R.id.btSafety1));
+            buttons.add(enterPasswordPopup.findViewById(R.id.btSafety2));
+            buttons.add(enterPasswordPopup.findViewById(R.id.btSafety3));
+            for (int i = 0; i< 3; i++) {
+                Button button = buttons.get(i);
+                button.setText(passwords.get(i));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        password.setText(button.getText());
+                    }
+                });
+            }
+        } else {
+            lSafety.setVisibility(View.GONE);
+        }
+
+
+
+
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -417,6 +477,7 @@ public class GameActivity extends AppCompatActivity {
         TextView txtSessionResult = sessionEndedPopup.findViewById(R.id.txtSessionResult);
         TextView txtFinalScore = sessionEndedPopup.findViewById(R.id.txtFinalScore);
         Button btFine = sessionEndedPopup.findViewById(R.id.btFine);
+
 
         if (gameManager.getMe().getScore() > gameManager.getYou().getScore()) {
             txtSessionResult.setText("You won!");
