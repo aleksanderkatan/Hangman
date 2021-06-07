@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    android:launchMode="singleInstance">
 
     <TextView
         android:id="@+id/txtEstablishingConnection"
@@ -46,8 +47,8 @@
 
         <TextView
             android:id="@+id/txtPassword"
-            android:layout_width="257dp"
-            android:layout_height="64dp"
+            android:layout_width="320dp"
+            android:layout_height="96dp"
             android:gravity="center"
             android:letterSpacing="0.1"
             android:text="password"
@@ -147,8 +148,8 @@
 
         <ImageView
             android:id="@+id/imHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txtGuessing"
             app:layout_constraintHorizontal_bias="0.177"

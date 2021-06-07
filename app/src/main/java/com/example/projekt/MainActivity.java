@@ -3,6 +3,7 @@ package com.example.projekt;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.projekt.other.InputSanitizer;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor sharedPrefEditor;
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btMultiplayer;
     private Button btLog;
     private TextView txtGreet;
+
+    private static boolean firstRun = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,18 @@ public class MainActivity extends AppCompatActivity {
 
         updatePlayerName();
 
-        enableBTAndLocPopup();
+//        ActivityManager am = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);
+//        if(am != null) {
+//            List<ActivityManager.AppTask> tasks = am.getAppTasks();
+//            if (tasks != null && tasks.size() > 0) {
+//                tasks.get(0).setExcludeFromRecents(true);
+//            }
+//        }
+
+        if (firstRun) {
+            enableBTAndLocPopup();
+            firstRun = false;
+        }
     }
 
     private void changeActivity(Class<? extends AppCompatActivity> activity) {

@@ -155,8 +155,6 @@ public class JoinGameActivity extends AppCompatActivity {
             }
         });
 
-
-
         bcs = new BluetoothConnectionService();
         connectionDevice = new ArrayList<>();
 

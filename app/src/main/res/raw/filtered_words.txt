@@ -152,3 +152,51 @@ vertex
 volume
 wavelength
 whole number
+satisfability problem
+disjunctive normal form
+chomsky normal form
+dijkstra algorithm
+countably many
+deterministic finite automata
+nondeterministic finite automata
+context-free grammar
+push-down automata
+context grammar
+grammar
+linearly bounded automata
+turing machine
+non-deterministic polynomial
+polynomial reduction
+expected value
+variance
+Chernoff inequality
+discrete mathematics
+bijection
+bipartite graph
+spanning tree
+non-polynomial complexity
+turing complete
+multi-layer perceptron
+convolutional neural network
+autoencoder
+machine learning
+reinforcement learning
+Aho-Corasic automata
+Rabin-Miller algorithm
+turbo matching
+fast Fourier transformata
+flow network
+Ford-Fulkerson method
+binary search tree
+black-red tree
+asynchronus method
+recursive call
+depth-first search
+reverse polish notation
+phonebook
+abstract interface
+public final static string TAG
+complex numbers
+class inheritance
+object-oriented programming
+poisson distribution

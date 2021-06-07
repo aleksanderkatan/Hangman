@@ -41,6 +41,7 @@ public class BluetoothConnectionService implements Serializable {
     public Context context;
 
     public BluetoothConnectionService() {
+        Log.d(TAG, "Creating new BCS");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         start();
     }
@@ -144,10 +145,12 @@ public class BluetoothConnectionService implements Serializable {
                 Log.d(TAG, "run: ConnectThread connected.");
             } catch (IOException e) {
                 // Close the socket
+                e.printStackTrace();
                 try {
                     mmsocket.close();
                     Log.d(TAG, "run: Closed Socket.");
                 } catch (IOException e1) {
+                    e1.printStackTrace();
                     Log.e(TAG, "connectThread: run: Unable to close connection in socket " + e1.getMessage());
                 }
                 Log.d(TAG, "run: ConnectThread: Could not connect to UUID: " + MY_UUID_INSECURE );
@@ -262,7 +265,9 @@ public class BluetoothConnectionService implements Serializable {
         public void cancel() {
             try {
                 mmsocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -277,7 +282,6 @@ public class BluetoothConnectionService implements Serializable {
     /**
      * Write to the ConnectedThread in an unsynchronized manner
      *
-     * @param out The bytes to write
      * @see ConnectedThread#write(byte[])
      */
     public boolean isConnected() {
@@ -290,4 +294,14 @@ public class BluetoothConnectionService implements Serializable {
         connectedThread.write(out);
     }
 
+    public void cancelThreads() {
+        if (connectedThread != null)
+            connectedThread.cancel();
+        if (connectThread != null) {
+            connectThread.cancel();
+        }
+        if (insecureAcceptThread != null) {
+            insecureAcceptThread.cancel();
+        }
+    }
 }

@@ -159,5 +159,13 @@ public class HostWaitingActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver5, new IntentFilter("IncomingMessage"));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver1);
+        unregisterReceiver(broadcastReceiver2);
+        unregisterReceiver(broadcastReceiver5);
+    }
+
 
 }

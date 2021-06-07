@@ -41,7 +41,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
-    public final static String TAG = "JoinedGameActivity";
+    public final static String TAG = "GameActivity";
     BluetoothConnectionService bcs;
     boolean host;
     long beginTimestamp;
@@ -79,20 +79,23 @@ public class GameActivity extends AppCompatActivity {
                 gameManager.initializeOptions(message);
                 gameManager.initializeMe(getStringFromSharedPref("playerName"));
                 gameManager.initializeYou(message.playerName);
-                gameManager.isGuessing = true;
+                gameManager.isGuessing = false;     //will be negated
                 GameMessage m = GameMessageFactory.produceInitManagerAnswerMessage(getStringFromSharedPref("playerName"));
                 bcs.write(GameMessage.toBytes(m));
                 beginTimestamp = System.currentTimeMillis();
                 txtEstablishing.setText("Waiting for\nfirst password...");
                 break;
             case INIT_MANAGER_ANSWER:
+                Log.d(TAG, "received init manager answer");
                 gameManager.initializeYou(message.playerName);
-                gameManager.isGuessing = false;
+                gameManager.isGuessing = true;      //will be negated
                 beginTimestamp = System.currentTimeMillis();
                 txtEstablishing.setText("Waiting for\nfirst password...");
                 enterPassword();        // host is always second to guess
                 break;
             case INIT_GAME:
+                gameManager.isGuessing = ! gameManager.isGuessing;
+                Log.d(TAG, "received init game");
                 txtEstablishing.setVisibility(View.INVISIBLE);
                 txtTargetScore.setText(String.valueOf(gameManager.getPointsToWin()));
                 lGame.setVisibility(View.VISIBLE);
@@ -100,7 +103,11 @@ public class GameActivity extends AppCompatActivity {
                 keyboard.resetButtons();
                 break;
             case NORMAL:
+                Log.d(TAG, "received normal message");
+                gameManager.message(message);
+                break;
             case HINT:
+                Log.d(TAG, "received hint message");
                 gameManager.message(message);
                 break;
         }
@@ -218,6 +225,7 @@ public class GameActivity extends AppCompatActivity {
         txtMyHints = findViewById(R.id.txtMyHints);
         txtYourHints = findViewById(R.id.txtYourHints);
         imHint = findViewById(R.id.imHint);
+        imHint.setImageResource(R.drawable.bulb);
         txtTargetScore = findViewById(R.id.txtTargetScore);
 
         imHint.setOnClickListener(v -> btHintPressedAction());
@@ -233,8 +241,10 @@ public class GameActivity extends AppCompatActivity {
 
         if (host) {       //memory leak handled
             bcs = HostWaitingActivity.bcs;
+            HostWaitingActivity.bcs = null;
         } else {
             bcs = JoinGameActivity.bcs;
+            JoinGameActivity.bcs = null;
         }
         bcs.context = this;
 
@@ -244,7 +254,7 @@ public class GameActivity extends AppCompatActivity {
 
         if (!host) {            // ! change that
             Runnable task = () -> {
-                for (int i = 0; i< 30; i++) {
+                for (int i = 0; i< 10; i++) {
                     try {
                         TimeUnit.SECONDS.sleep(1);
                     } catch (Exception e) {
@@ -254,6 +264,11 @@ public class GameActivity extends AppCompatActivity {
                         Log.d(TAG, "connected after " + i + " tries");
                         break;
                     }
+                }
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 if (! bcs.isConnected()) {
                     Log.d(TAG, "Connection failed to establish");
@@ -275,6 +290,12 @@ public class GameActivity extends AppCompatActivity {
             gameManager.initializeMe(m.playerName);
             bcs.write(GameMessage.toBytes(m));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver5);
     }
 
     void saveToDatabase() {
@@ -377,24 +398,27 @@ public class GameActivity extends AppCompatActivity {
         }
         txtThePassword.setText("The password was:\n" + gameManager.getCurrentGame().getPassword());
 
+        Boolean enterPassword = gameManager.isGuessing;
         updateView();
 
         btProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                updateView();
 
                 if (gameManager.isSessionFinished()) {
                     sessionEnded();
                     return;
                 }
 
-                gameManager.isGuessing = ! gameManager.isGuessing;
-                if (! gameManager.isGuessing) {
+                if (enterPassword) {
                     enterPassword();
                 } else {
-                    txtGuessing.setText("You're waiting!");
-                    keyboard.disableButtons();
+                    if (! gameManager.isGuessing) {
+                        txtGuessing.setText("You're waiting!");
+                        keyboard.disableButtons();
+                    }
                 }
             }
         });
@@ -487,6 +511,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // what to do?
                 dialog.dismiss();
+                bcs.cancelThreads();
                 startActivity(new Intent(bcs.context, MainActivity.class));
             }
         });
