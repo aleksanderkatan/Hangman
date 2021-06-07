@@ -86,12 +86,13 @@
             app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtPassword"
-            app:layout_constraintVertical_bias="0.442">
+            app:layout_constraintVertical_bias="0.833">
 
             <LinearLayout
                 android:id="@+id/loButtons1"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
                 android:orientation="horizontal"></LinearLayout>
 
             <LinearLayout

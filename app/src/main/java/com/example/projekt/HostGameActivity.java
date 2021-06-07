@@ -15,6 +15,8 @@ import android.content.Context;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.projekt.other.InputSanitizer;
+
 public class HostGameActivity extends AppCompatActivity {
     private static final String TAG = "HostGameActivity";
     TextView numPointsToWin, numFailsToHang, numHints;
@@ -48,12 +50,17 @@ public class HostGameActivity extends AppCompatActivity {
         btPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!InputSanitizer.isValidInt(numPointsToWin.getText().toString(), 1, 100)) return;
                 int pointsToWin = Integer.parseInt(numPointsToWin.getText().toString());
+                if (!InputSanitizer.isValidInt(numFailsToHang.getText().toString(), 1, 100)) return;
                 int failsToHang = Integer.parseInt(numFailsToHang.getText().toString());
                 int safetyWords = 0;
                 if (cbSafetyWords.isChecked()) safetyWords=1;   //boolean
-                int hints = Integer.parseInt(numHints.getText().toString());
-                if (! cbHints.isChecked()) hints = 0;
+                int hints = 0;
+                if (cbHints.isChecked()) {
+                    if (!InputSanitizer.isValidInt(numHints.getText().toString(), 0, 100000)) return;
+                    hints = Integer.parseInt(numHints.getText().toString());
+                }
 
                 Log.d(TAG, new String(
                         new StringBuilder("Options: ").append(pointsToWin)

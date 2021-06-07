@@ -1,4 +1,4 @@
-package com.example.projekt;
+package com.example.projekt.other;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.res.ResourcesCompat;
+
+import com.example.projekt.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

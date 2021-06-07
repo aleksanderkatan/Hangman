@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.projekt.other.InputSanitizer;
+
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor sharedPrefEditor;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String playerName = name.getText().toString();
-                if (playerName.length() < 1) return;
+                if (!InputSanitizer.isValidString(playerName, 1, 10)) return;
                 sharedPrefEditor.putString("playerName", playerName);
                 sharedPrefEditor.apply();
                 updatePlayerName();

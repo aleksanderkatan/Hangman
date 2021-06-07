@@ -28,20 +28,17 @@ import com.example.projekt.game_logic.GameInstance;
 import com.example.projekt.game_logic.GameManager;
 import com.example.projekt.game_logic.GameMessage;
 import com.example.projekt.game_logic.GameMessageFactory;
+import com.example.projekt.other.GameKeyboard;
+import com.example.projekt.other.InputSanitizer;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 public class GameActivity extends AppCompatActivity {
     public final static String TAG = "JoinedGameActivity";
@@ -440,14 +437,11 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
-
-
-
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String word = password.getText().toString();
-                if (word.length() < 1) return;
+                if (!InputSanitizer.isValidString(word, 1, 50)) return;
 
                 GameMessage myMessage = GameMessageFactory.produceInitGameMessage(word);
                 GameMessage yourMessage = GameMessageFactory.produceInitGameMessage(word);

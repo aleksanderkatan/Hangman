@@ -33,7 +33,7 @@ public class Password {
 
         for (int i = 0; i< word.length(); i++) {
             char c = word.charAt(i);
-            if (c == ' ' || c == '-' || chars.get(c) != null) {
+            if (c == ' ' || c == '-' || c == '\'' || chars.get(c) != null) {
                 answer.append(c);
             } else {
                 answer.append('_');
