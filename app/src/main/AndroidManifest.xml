@@ -23,6 +23,7 @@
         <activity android:name=".HostWaitingActivity" />
         <activity android:name=".JoinGameActivity" />
         <activity android:name=".GamesLogActivity" />
+        <activity android:name=".SingleplayerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

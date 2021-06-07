@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPref = this.getSharedPreferences("GLOBAL", Context.MODE_PRIVATE);
         sharedPrefEditor = sharedPref.edit();
 
-        btSingleplayer.setOnClickListener(v -> changeActivity(GameActivity.class));
-        btMultiplayer.setOnClickListener(v -> multiplayer());
+        btSingleplayer.setOnClickListener(v -> changeActivity(SingleplayerActivity.class));
+        btMultiplayer.setOnClickListener(v -> multiplayerPopup());
         btLog.setOnClickListener(v -> changeActivity(GamesLogActivity.class));
         txtGreet.setOnClickListener(v -> enterName(true));
 
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void multiplayer() {
+    private void multiplayerPopup() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View multiplayerPopup = getLayoutInflater().inflate(R.layout.popup_multiplayer, null);
 
