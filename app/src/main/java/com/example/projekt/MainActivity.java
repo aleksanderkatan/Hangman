@@ -37,12 +37,11 @@ public class MainActivity extends AppCompatActivity {
         btSingleplayer.setOnClickListener(v -> changeActivity(SingleplayerActivity.class));
         btMultiplayer.setOnClickListener(v -> multiplayerPopup());
         btLog.setOnClickListener(v -> changeActivity(GamesLogActivity.class));
-        txtGreet.setOnClickListener(v -> enterName(true));
+        txtGreet.setOnClickListener(v -> enterNamePopup(true));
 
         updatePlayerName();
-        if (sharedPref.getString("playerName", null) == null) {
-            enterName(false);
-        }
+
+        enableBTAndLocPopup();
     }
 
     private void changeActivity(Class<? extends AppCompatActivity> activity) {
@@ -63,15 +62,16 @@ public class MainActivity extends AppCompatActivity {
         txtGreet.setText(text);
     }
 
-    private void enterName(boolean cancelable) {
+    private void enterNamePopup(boolean cancelable) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final View enterNamePopup = getLayoutInflater().inflate(R.layout.popup_enter_name, null);
-        EditText name = enterNamePopup.findViewById(R.id.enterNamePopup_name);
-        Button save = enterNamePopup.findViewById(R.id.enterNamePopup_save);
 
         dialogBuilder.setView(enterNamePopup);
         AlertDialog dialog = dialogBuilder.create();
         dialog.setCancelable(cancelable);
+
+        EditText name = enterNamePopup.findViewById(R.id.enterNamePopup_name);
+        Button save = enterNamePopup.findViewById(R.id.enterNamePopup_save);
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +82,28 @@ public class MainActivity extends AppCompatActivity {
                 sharedPrefEditor.apply();
                 updatePlayerName();
                 dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void enableBTAndLocPopup() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final View enableBTPopup = getLayoutInflater().inflate(R.layout.popup_bt_loc, null);
+
+        dialogBuilder.setView(enableBTPopup);
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.setCancelable(false);
+
+        Button btOK = enableBTPopup.findViewById(R.id.btOK);
+        btOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (sharedPref.getString("playerName", null) == null) {
+                    enterNamePopup(false);
+                }
             }
         });
 
